@@ -48,7 +48,7 @@ async def form_recovery_post(request: Request, email: str = Form(...)):
     if exist:
         user=db.getUser(email)
         password=generate_password()
-        response=requests.post(f"{setting.URL_COMPANY}/api/Auth/ResetPassword",json={"username":str(user[0]),"newPassword":password},verify=False)
+        response=requests.post(f"{setting.URL_COMPANY}/Auth/ResetPassword",json={"username":str(user[0]),"newPassword":password},verify=False)
         if response.status_code == 200:
             message = await sendigMail(password, email)
             return {"message": message}

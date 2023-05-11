@@ -38,11 +38,11 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS=False,
 )
 
-@app.get("/recovery/")
+@app.get("/recovery")
 async def form_recovery_get(request: Request):
     return templates.TemplateResponse("recovery_template.html", {"request": request})
 
-@app.post("/recovery/")
+@app.post("/recovery")
 async def form_recovery_post(request: Request, email: str = Form(...)):
     exist = db.checkEmail(email)
     if exist:

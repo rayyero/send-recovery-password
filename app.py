@@ -50,19 +50,19 @@ async def form_recovery_post(request: Request, email: str = Form(...)):
         password=generate_password()
         response=requests.post(f"{setting.URL_COMPANY}/api/auth/ResetPassword",json={"username":str(user[0]),"newPassword":password})
         if response.status_code == 200:
-            message = await sendigMail(password, email)
+            message = await sendigMail(password, email,str(user[0]))
             return {"message": message}
         else:
             return {"message": "Error when attempting to change the password."}
     else:
         return templates.TemplateResponse("recovery_template.html", {"request": request,"error_message": "Invalid email"})
 
-async def sendigMail(password, email):
+async def sendigMail(password, email,user):
     fm = FastMail(conf)
     with open("templates/email_template.html", "r", encoding='utf-8') as f:
         template = f.read()
 
-    body = template.replace('{{password}}', password)
+    body = template.replace('{{password}}', password).replace('{{user}}',user)
 
     message = MessageSchema(
         subject="Clinic App Notification",
